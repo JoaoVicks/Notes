@@ -1,0 +1,19 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    background: #1B1B1B;
+    display: flex;
+    font-family: 'Poppins';
+}
+aside{
+flex:0 1 0;
+position: fixed;
+
+}
+#container-principal{
+    margin-left: 30%;
+    flex:2 1 0;
+}
