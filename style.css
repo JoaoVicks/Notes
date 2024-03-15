@@ -9,11 +9,123 @@ body{
     font-family: 'Poppins';
 }
 aside{
-flex:0 1 0;
+width: 330px;
+flex:1 1 0;
 position: fixed;
+color: #fdfdfd;
+background-color: #121212;
+height: 100vh;
+border-top-right-radius: 20px;
+border-top-left-radius: 20px;
+padding: 1.2rem;
 
 }
 #container-principal{
-    margin-left: 30%;
+    margin-left: 20%;
     flex:2 1 0;
+}
+.perfil{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-around;
+    
+
+}
+.perfil h4{
+font-weight: 200;
+font-size: 1.2rem;
+}
+.perfil button{
+    background-color: transparent;
+    outline: none;
+    border: none;
+    transition: all 0.5s;
+}
+.perfil button:hover{
+    cursor: pointer;
+    scale: 1.1;
+}
+.btn-create{
+    margin-top: 2rem;
+    border-bottom: 4px solid #5AE22A;
+    border-radius: 5px;
+
+}
+.btn-create button{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: none;
+    background-color: transparent;
+    font-family: 'Poppins';
+    font-size: 1rem;
+    color: white;
+    margin-bottom: 0.2rem;
+    width: 100%;
+}
+.card-aside{
+    width: 100%;
+    margin-top: 3rem;
+    padding: 1rem;
+    background-color: #0A0909;
+    border: 3px solid #878787;
+    border-radius: 1.1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.card-aside .time-day{
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Poppins';
+    font-weight: 300;
+}
+.card-aside textarea{
+    margin-top: 1.3rem;
+    background-color: #0A0909;
+    color: #ffff;
+    border: none;
+    height: 300px;
+    outline: none;
+    width: 100%;
+    resize: none;
+    font-family: 'Poppins';
+    font-size: 1.1rem;
+    font-weight: 300;
+}
+.select-colors{
+    display: flex;
+    gap: 0.3rem;
+    position: relative;
+}
+.select-colors::after{
+content: '';
+position: absolute;
+background-color:#5AE22A;
+width: 100%;
+margin-top: 1rem;
+height: 5px;
+bottom: 0;
+}
+.select-colors input[type='radio']{
+display: none;
+}
+.container-radio::after{
+    content: '';
+    display: flex;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+   
+    
+}
+.green::after{
+background-color: #5AE22A;
+}
+.orange::after{
+background-color: #E26D2A;
+}
+.pink::after{
+    background-color: #E22A8E;
 }
