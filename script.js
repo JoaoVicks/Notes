@@ -5,6 +5,7 @@ const textAreaCreate = document.querySelector('#inota')
 const containerCards = document.querySelector('.container-cards')
 const inputsRadios = document.querySelectorAll('input[type=radio]')
 const containerCardsfixados = document.querySelector('#container-cards-fixados')
+const rowColor = document.querySelector('.row-color')
 //-----------------variaveis Globais-----------------------
 let colorRow = '#5AE22A'
 //-------------------funções----------------------
@@ -14,12 +15,15 @@ inputsRadios.forEach((btnRadio) => {
         switch (btn.value) {
             case 'green':
                 colorRow = '#5AE22A'
+                rowColor.style.backgroundColor = '#5AE22A'
                 break;
             case 'orange':
                 colorRow = '#E26D2A'
+                rowColor.style.backgroundColor = '#E26D2A'
                 break;
             case 'pink':
                 colorRow = '#E22A8E'
+                rowColor.style.backgroundColor = '#E22A8E'
                 break;
 
         }
@@ -27,7 +31,7 @@ inputsRadios.forEach((btnRadio) => {
     })
 })
 
-const createNote = (text, save = false, estate = false) => {
+const createNote = (text, save = false, estate = false, color) => {
 
     const elementoStr = ` <div class="card">
 <div class="time-user-day">
@@ -63,7 +67,7 @@ const createNote = (text, save = false, estate = false) => {
 
             saveLocalStrorage(nota)
         }
-
+// continuar a logica do color
         if (estate === false) {
         containerCards.appendChild(card)
         
@@ -74,8 +78,13 @@ const createNote = (text, save = false, estate = false) => {
         card.classList.add('fixado')
         }
 
-
-
+    }
+    function loadTarefas(){
+        const notes = getLocalStorage()
+        notes.forEach((nota)=>{
+            createNote(nota.texto,save= true,nota.estate)
+            
+        })
     }
 
     //------------------------localhost--------------------
@@ -90,13 +99,11 @@ const createNote = (text, save = false, estate = false) => {
     }
 
     // Eventos ----------------------------------------
-    rosa.addEventListener('click', () => {
-        console.log('1')
-    })
+ 
     btnCreate.addEventListener('click', () => {
         const texto = textAreaCreate.value
 
-        if (!texto) {
+        if (!texto|| texto == '') {
             console.log('vazio')
             return
         }
@@ -104,3 +111,4 @@ const createNote = (text, save = false, estate = false) => {
 
         createNote(texto)
     })
+    loadTarefas()

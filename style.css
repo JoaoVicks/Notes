@@ -355,3 +355,21 @@ gap: 0.8rem;
 .fixado{
     opacity: 0.8;
 }
+.container-cards-empty{
+    background-color: #0A0909;
+    border: 2px dashed #4f4b4b;
+    border-radius: 20px;
+    width: 95%;
+    height: 650px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#info-container-empty{
+    display: flex;
+}
+#info-container-empty p{
+    color: white;
+    font-size: 1.3rem;
+    opacity: 0.6;
+}
