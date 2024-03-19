@@ -8,8 +8,11 @@ body{
     display: flex;
     font-family: 'Poppins';
 }
+button{
+    cursor: pointer;
+}
 aside{
-width: 330px;
+width: 370px;
 flex:1 1 0;
 position: fixed;
 color: #fdfdfd;
@@ -17,11 +20,32 @@ background-color: #121212;
 height: 100vh;
 border-top-right-radius: 20px;
 border-top-left-radius: 20px;
-padding: 1.2rem;
-
+padding: 1.5rem;
+z-index: 2;
+}
+/* Classe utilitária */
+.neuphorm{
+    border-radius: 20px;
+    background: #3a3737;
+    box-shadow: inset -49px 49px 65px #252323,
+                inset 49px -49px 65px #4f4b4b,
+                15px 15px 30px #141414;
+}
+textarea{
+    resize:none;
+}
+::-webkit-scrollbar{
+    width: 15px;
+    background-color: #3A3737;
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb{
+    background-color:#5AE22A;
+    border-radius: 10px;
 }
 #container-principal{
-    margin-left: 20%;
+    margin-left: 23%;
+    padding-top:1rem ;
     flex:2 1 0;
 }
 .perfil{
@@ -34,7 +58,7 @@ padding: 1.2rem;
 }
 .perfil h4{
 font-weight: 200;
-font-size: 1.2rem;
+font-size: 1.4rem;
 }
 .perfil button{
     background-color: transparent;
@@ -48,9 +72,13 @@ font-size: 1.2rem;
 }
 .btn-create{
     margin-top: 2rem;
-    border-bottom: 4px solid #5AE22A;
+    border-bottom: 4px solid #4f4b4b;
     border-radius: 5px;
-
+    cursor: pointer;
+    
+}
+.btn-create>p{
+    pointer-events:none ;
 }
 .btn-create button{
     display: flex;
@@ -74,6 +102,7 @@ font-size: 1.2rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    position: relative;
 }
 .card-aside .time-day{
     display: flex;
@@ -82,50 +111,247 @@ font-size: 1.2rem;
     font-weight: 300;
 }
 .card-aside textarea{
-    margin-top: 1.3rem;
+    margin:1.2rem 0rem;
     background-color: #0A0909;
     color: #ffff;
     border: none;
-    height: 300px;
+    height: 270px;
     outline: none;
     width: 100%;
-    resize: none;
+    
     font-family: 'Poppins';
     font-size: 1.1rem;
-    font-weight: 300;
+    font-weight: 200;
 }
 .select-colors{
     display: flex;
     gap: 0.3rem;
     position: relative;
 }
-.select-colors::after{
-content: '';
-position: absolute;
-background-color:#5AE22A;
-width: 100%;
-margin-top: 1rem;
-height: 5px;
-bottom: 0;
-}
+
 .select-colors input[type='radio']{
 display: none;
 }
-.container-radio::after{
+.container-radio label::after{
     content: '';
     display: flex;
     width: 40px;
     height: 40px;
     border-radius: 50%;
-   
+    margin-bottom: 1rem;
+    cursor: pointer;
     
 }
-.green::after{
+.green label::after{
 background-color: #5AE22A;
 }
-.orange::after{
+#label-orange::after{
 background-color: #E26D2A;
 }
-.pink::after{
+.pink label::after{
     background-color: #E22A8E;
+}
+input#iorange:checked ~ #label-orange::after{
+    border: 4px solid #fff;
+}
+input#igreen:checked ~ #label-green::after{
+    border: 4px solid #fff;
+}
+input#ipink:checked ~ #label-pink::after{
+    border: 4px solid #fff;
+}
+.row-color{
+    width: 100%;
+    height: 15px;
+    background-color: #5AE22A;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    border-bottom-left-radius: 1.1rem;
+    border-bottom-right-radius: 1.1rem;
+}
+
+header{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+
+}
+
+.btns-navbar{
+    background-color: #3A3737;
+    padding: 1rem 1.7rem;
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+.btns-navbar button{
+    background-color: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    
+}
+.btns-navbar button:nth-child(1){
+    padding-right: 1rem;
+    border-right: 3px solid #878787;
+    margin-right:1rem ;
+}
+.container-input{
+    width: 600px;
+    background-color: #3A3737;
+    display: flex;
+    align-items: center;
+    padding: 0.7rem 1.3rem;
+    gap: 1rem;
+    border-radius: 20px;
+}
+.container-input input{
+width: 100%;
+border-top:none ;
+border-left:none ;
+border-right:none ;
+border-bottom: 3px solid #878787;
+color: #fff;
+padding: 0.5rem;
+font-size: 1.2rem;
+background-color: transparent;
+outline: none;
+transition: all 0.5s;
+}
+main{
+    margin-top: 2rem;
+}
+.container-input input:focus{
+    border-bottom: 3px solid #fff;
+}
+#container-btns-main{
+display: flex;
+justify-content: space-between;
+}
+.container-users{
+position: relative;
+z-index: 1;
+width: 270px;
+background-color: #3A3737;
+padding:0.7rem;
+display: flex;
+justify-content: space-between;
+align-items: center;
+border-radius: 20px;
+margin-left: 3rem;
+
+}
+.users img{
+height: 45px;
+width: 45px;
+border-radius: 50%;
+}
+.users img:nth-child(2),
+.users img:nth-child(3),
+.users img:nth-child(4),
+.users img:nth-child(5){
+margin-left: -0.5rem;
+}
+#inumerador{
+color: #fff;
+font-size: 22px;
+font-family: 'Poppins';
+font-weight: 200;
+margin-right: 0.5rem;
+}
+#donwlad-csv{
+    margin-right: 5rem;
+    width: 200px;
+    border-radius: 20px;
+    background-color: #3A3737;
+    outline: none;
+    color: white;
+    border: none;
+    font-size: 20px;
+    font-family: 'Poppins';
+    cursor: pointer;
+    font-weight: 200;
+}
+.container-cards{
+    display: flex;
+    flex-wrap: wrap;
+    gap:2rem;
+    margin-top:2.2rem ;
+
+}
+
+.card{
+    width: 400px;
+    height: 450px;
+    border-radius: 20px;
+    background-color: #0A0909;
+    border: 3px solid #878787;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    padding: 0.7rem 1.5rem;
+}
+.time-user-day{
+    display: flex;
+    color: white;
+    width: 100%;
+    justify-content: space-around;
+    align-items: center;
+}
+.time-user-day p{
+font-size: 19px;
+font-weight: 200;
+}
+.time-user-day img{
+    height: 45px;
+    width: 45px;
+    border-radius: 50%;
+}
+.card textarea{
+    
+    background-color: #0A0909;
+    color: #ffff;
+    border: none;
+    height: 280px;
+    outline: none;
+    width: 100%;
+    margin: 1.5rem auto 0rem;
+    font-family: 'Poppins';
+    font-size: 1.1rem;
+    font-weight: 200;
+}
+.line-color{
+    position: absolute;
+    width: 100%;
+    height: 12px;
+    background-color: #5AE22A;
+    bottom: 0;
+    left: 0;
+    border-bottom-left-radius: 1.1rem;
+    border-bottom-right-radius: 1.1rem;
+}
+.container-btns-card-main{
+display: flex;
+gap: 0.8rem;
+}
+.btn-card{
+    border: 3px solid #3A3737;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.5s;
+}
+.btn-card:hover{
+    cursor: pointer;
+    border: 3px solid #fff;
+
+}
+
+.fixado{
+    opacity: 0.8;
 }
