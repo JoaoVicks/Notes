@@ -6,9 +6,16 @@ const containerCards = document.querySelector('.container-cards')
 const inputsRadios = document.querySelectorAll('input[type=radio]')
 const containerCardsfixados = document.querySelector('#container-cards-fixados')
 const rowColor = document.querySelector('.row-color')
+const noFixedContainer = document.querySelector('#container-cards-nofixed')
+const fixedContainer = document.querySelector('#container-cards-fixados')
 //-----------------variaveis Globais-----------------------
 let colorRow = '#5AE22A'
 //-------------------funções----------------------
+function fixeNote(){
+
+}
+const date = new Date()
+console.log(`${date.getHours()}:${date.getMinutes()}`)
 inputsRadios.forEach((btnRadio) => {
     btnRadio.addEventListener('click', (e) => {
         const btn = e.target
@@ -57,7 +64,9 @@ const createNote = (text, save = false, estate = false, color) => {
 
     const card = elementoHTML.querySelector('.card')
     const lineColor = card.querySelector('.line-color')
+
     lineColor.style.backgroundColor = colorRow
+
         if (save == false) {
             const nota = {
                 texto: text,
@@ -67,14 +76,20 @@ const createNote = (text, save = false, estate = false, color) => {
 
             saveLocalStrorage(nota)
         }
+        else{
+            lineColor.style.backgroundColor= color
+        }
+
+
 // continuar a logica do color
+
         if (estate === false) {
-        containerCards.appendChild(card)
+        noFixedContainer.appendChild(card)
         
-        return
+        
         }
         else{
-            containerCardsfixados.appendChild(card)
+        containerCardsfixados.appendChild(card)
         card.classList.add('fixado')
         }
 
@@ -82,7 +97,7 @@ const createNote = (text, save = false, estate = false, color) => {
     function loadTarefas(){
         const notes = getLocalStorage()
         notes.forEach((nota)=>{
-            createNote(nota.texto,save= true,nota.estate)
+            createNote(nota.texto,save= true,nota.estate,nota.cor)
             
         })
     }
@@ -99,7 +114,14 @@ const createNote = (text, save = false, estate = false, color) => {
     }
 
     // Eventos ----------------------------------------
- 
+    document.addEventListener('click',(e)=>{
+        const elementoAtivador = e.target
+        // continuar código--------------------------
+        if(elementoAtivador.classList.contains('')){
+
+        }
+    })
+
     btnCreate.addEventListener('click', () => {
         const texto = textAreaCreate.value
 
