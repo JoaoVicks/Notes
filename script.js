@@ -5,11 +5,12 @@ const textAreaCreate = document.querySelector('#inota')
 const inputsRadios = document.querySelectorAll('input[type=radio]')
 const containerCardsfixados = document.querySelector('#container-cards-fixados')
 const rowColor = document.querySelector('.row-color')
-const noFixedContainer = document.querySelector('#container-cards-nofixed')
-const fixedContainer = document.querySelector('#container-cards-fixados')
-const containerCardsEmpty= document.querySelector('#container-cards-empty')
+const containerCards = document.querySelector('.container-cards')
+const inputSearch = document.querySelector('#input-search')
+const containerCardsEmpty = document.querySelector('#container-cards-empty')
 const HoraCardAside = document.querySelector('.hours')
 const dataCardAside = document.querySelector('.date')
+const btnCSV = document.querySelector('#donwlad-csv')
 //-----------------variaveis Globais-----------------------
 let colorRow = '#5AE22A'
 //-------------------funções----------------------
@@ -57,21 +58,22 @@ const createNote = (text, fixed, color, id, horario, data) => {
 
     const elementoStr = `<div class="card">
 <div class="time-user-day">
-    <p>${horario}</p>
+    <p id="hora">${horario}</p>
     <img src="Rectangle 22.png" alt="">
-    <p>${data}</p>
+    <p id="data">${data}</p>
 
 </div>
 <textarea name="note-card" id="" cols="30" rows="10">${text}</textarea>
 <div class="container-btns-card-main">
- <div class="btn-card fixe" >
-        <img src="pin.svg" alt="imagem de pin">
+    <div class="btn-card fixe" >
+        <img src="pin.svg" alt="icone de pin">
     </div>
     <div class="btn-card remove">
-        <img src="lixeira.svg" alt="imagem de lixeira">
+        <img src="lixeira.svg" alt="icone de lixeira">
     </div>
-   
-
+    <div class="btn-card  duplicate">
+        <img src="icn-duplicate.svg" alt="icone de duplicar">
+    </div>
 </div>
 <div class="line-color"></div>
 </div>`
@@ -80,9 +82,15 @@ const createNote = (text, fixed, color, id, horario, data) => {
 
     const card = elementoHTML.querySelector('.card')
     const lineColor = card.querySelector('.line-color')
+
     lineColor.style.backgroundColor = color
+
+    const textarea = card.querySelector('textarea')
     const btnRemov = card.querySelector('.remove')
     const btnFixed = card.querySelector('.fixe')
+    const btnDuplicate = card.querySelector('.duplicate')
+    const horaP = card.querySelector('#hora')
+    const dataP = card.querySelector('#data')
 
     btnRemov.addEventListener('click', (e) => {
         removerNota(id, e.target)
@@ -91,72 +99,99 @@ const createNote = (text, fixed, color, id, horario, data) => {
     btnFixed.addEventListener('click', (e) => {
         fixeNota(id, e.target)
     })
+    btnDuplicate.addEventListener('click', (e) => {
+        duplicar(text, color, fixed)
+    })
+    textarea.addEventListener('input', () => {
+        const texto = textarea.value
+        const UpdateHorario = generateHours()
+        const UpdateDate = gerarData()
+        horaP.textContent = UpdateHorario
+        dataP.textContent = UpdateDate
+        editar(id, texto, UpdateHorario, UpdateDate)
+    })
 
-
-
-
-    if (fixed === false) {
-        noFixedContainer.appendChild(card)
-
-
-    }
-    else {
-        containerCardsfixados.appendChild(card)
+    if (fixed === true) {
         card.classList.add('fixed')
     }
-    containerCardsfixados.style.display = 'flex'
-    noFixedContainer.style.display = 'flex'
-    
+
     containerCardsEmpty.style.display = 'none'
+    containerCards.appendChild(card)
+
 }
 
 function loadTarefas() {
+    cleanNotes()
     const notes = getLocalStorage()
-    if (notes ===''|| !notes) {
-        
-    containerCardsfixados.style.display = 'none'
-    noFixedContainer.style.display = 'none'
     
-    containerCardsEmpty.style.display = 'flex'
+    if (!Array.isArray(notes) || notes.length === 0) {
+        containerCardsEmpty.style.display = 'flex'
     }
     else {
-        containerCardsfixados.style.display = 'flex'
-        noFixedContainer.style.display = 'flex'
-        
         containerCardsEmpty.style.display = 'none'
         notes.forEach((nota) => {
-            createNote(nota.texto, nota.fixed, nota.cor, nota.id, nota.horario)
-
+            createNote(nota.texto, nota.fixed, nota.cor, nota.id, nota.horario, nota.data)
         })
     }
-
 }
+
+function editar(id, texto, horario, data) {
+    const notas = getLocalStorage()
+    notas.map((nota) => {
+        if (nota.id === id) {
+            nota.texto = texto
+            nota.horario = horario
+            nota.data = data
+        }
+
+        localStorage.setItem('notes', JSON.stringify(notas))
+    })
+}
+
+function duplicar(texto, color, fixed) {
+    const nota = {
+        id: generateId(),
+        texto: texto,
+        cor: color,
+        horario: generateHours(),
+        data: gerarData(),
+        fixed
+    }
+    saveLocalStrorage(nota)
+    createNote(nota.texto, nota.fixed, nota.cor, nota.id, nota.horario, nota.data)
+
+    loadTarefas()
+}
+
 function removerNota(id, elemento) {
     const card = elemento.closest('div.card')
+
     card.remove()
 
     const notas = getLocalStorage()
     const arrayAtualizado = notas.filter((nota) => id !== nota.id)
     localStorage.setItem('notes', JSON.stringify(arrayAtualizado))
+
+    loadTarefas()
+}
+function cleanNotes() {
+    containerCards.replaceChildren([])
 }
 
 function fixeNota(id, elemento) {
-    const card = elemento.closest('div.card')
-    card.classList.toggle('fixed')
+
     const notes = getLocalStorage()
     notes.map((note) => {
         if (note.id === id) {
             note.fixed = !note.fixed
-            if (note.fixed === true) {
-                containerCardsfixados.appendChild(card)
-            }
-            if (note.fixed === false) {
-                noFixedContainer.appendChild(card)
-            }
+
         }
 
     })
+
     localStorage.setItem('notes', JSON.stringify(notes))
+
+    loadTarefas()
 
 }
 function generateId() {
@@ -185,18 +220,60 @@ function gerarData() {
 function atualizacaoDateAside() {
     HoraCardAside.textContent = generateHours()
     dataCardAside.textContent = gerarData()
+    setInterval(() => {
+        HoraCardAside.textContent = generateHours()
+        dataCardAside.textContent = gerarData()
+    }, 60000);
+
 }
+
+function pesquisar(texto) {
+    const notes = getLocalStorage()
+
+    const notesPesquisados = notes.filter((note) => {
+        return note.texto.includes(texto)
+    })
+
+    if (texto !== '') {
+        cleanNotes()
+        notesPesquisados.forEach((note) => {
+            createNote(note.texto, note.fixed,note.cor, note.id, note.horario, note.data)
+        })
+    }
+    else{
+        loadTarefas()
+    }
+}
+
 //------------------------localhost--------------------
 function getLocalStorage() {
     const notes = JSON.parse(localStorage.getItem('notes')) || []
-    return notes
+    const ordernotes = notes.sort((a, b) => (a.fixed > b.fixed ? -1 : 1));
+
+    return ordernotes
 }
 function saveLocalStrorage(nota) {
     const notes = getLocalStorage();
     notes.push(nota)
     localStorage.setItem('notes', JSON.stringify(notes))
 }
+function downloadCSV(){
+    const notes = getLocalStorage()
+    const csv = [
+        ['texto da nota','fixada ?','horario','data','id'],
+        ...notes.map((note)=>[note.texto,note.fixed,note.horario,note.data,note.id])
+    ].map((e)=>e.join(','))
+    .join('\n');
 
+    const element = document.createElement('a');
+
+    element.href = 'data:text/csv;charset=utf-8,'+encodeURI(csv)
+    console.log(encodeURI(csv))
+    element.target ='_blank';
+    element.download = 'notes.csv'
+    element.click()
+
+}
 // Eventos ----------------------------------------
 
 
@@ -211,6 +288,13 @@ btnCreate.addEventListener('click', () => {
     addNote(texto)
     textAreaCreate.value = ""
     textAreaCreate.focus()
+})
+inputSearch.addEventListener('keyup', () => {
+    const texto = inputSearch.value
+    pesquisar(texto)
+})
+btnCSV.addEventListener('click',()=>{
+    downloadCSV()
 })
 // inicialização ---------------------------
 loadTarefas()
