@@ -11,6 +11,7 @@ const containerCardsEmpty = document.querySelector('#container-cards-empty')
 const HoraCardAside = document.querySelector('.hours')
 const dataCardAside = document.querySelector('.date')
 const btnCSV = document.querySelector('#donwlad-csv')
+const btnNotasExcluidas = document.querySelector('#notas-excluidas')
 //-----------------variaveis Globais-----------------------
 let colorRow = '#5AE22A'
 //-------------------funções----------------------
@@ -38,12 +39,12 @@ inputsRadios.forEach((btnRadio) => {
     })
 })
 
-function addNote(text, fixed = false) {
+function addNote(color, text, horario=generateHours(),fixed = false) {
     const nota = {
         id: generateId(),
         texto: text,
-        cor: colorRow,
-        horario: generateHours(),
+        cor: color,
+        horario: horario,
         data: gerarData(),
         fixed
     }
@@ -54,8 +55,6 @@ function addNote(text, fixed = false) {
 
 
 const createNote = (text, fixed, color, id, horario, data) => {
-
-
     const elementoStr = `<div class="card">
 <div class="time-user-day">
     <p id="hora">${horario}</p>
@@ -93,7 +92,7 @@ const createNote = (text, fixed, color, id, horario, data) => {
     const dataP = card.querySelector('#data')
 
     btnRemov.addEventListener('click', (e) => {
-        removerNota(id, e.target)
+        removerNota(id, e.target, text, color, horario, data)
     })
 
     btnFixed.addEventListener('click', (e) => {
@@ -120,10 +119,46 @@ const createNote = (text, fixed, color, id, horario, data) => {
 
 }
 
+function createNoteExluida(text, fixed, color, id, horario, data) {
+    const elementoStr = `<div class="card">
+<div class="time-user-day">
+    <p id="hora">${horario}</p>
+    <img src="Rectangle 22.png" alt="">
+    <p id="data">${data}</p>
+
+</div>
+<textarea name="note-card" id="" cols="30" rows="10">${text}</textarea>
+<div class="container-btns-card-main">
+    <div class="btn-card recicle" >
+        <img src="pin.svg" alt="icone de pin">
+    </div>
+
+</div>
+<div class="line-color"></div>
+</div>`
+    const parse = new DOMParser()
+    const elementoHTML = parse.parseFromString(elementoStr, 'text/html')
+    const card = elementoHTML.querySelector('.card')
+    const lineColor = card.querySelector('.line-color')
+    const btnReciclar = card.querySelector('recicle')
+    lineColor.style.backgroundColor = color
+    btnReciclar.addEventListener('click', (e) => {
+        reciclarNota(id, e.target, text, color, horario, data)
+    })
+
+    if (fixed === true) {
+        card.classList.add('fixed')
+    }
+
+
+    containerCards.appendChild(card)
+
+}
+
 function loadTarefas() {
     cleanNotes()
     const notes = getLocalStorage()
-    
+
     if (!Array.isArray(notes) || notes.length === 0) {
         containerCardsEmpty.style.display = 'flex'
     }
@@ -147,7 +182,14 @@ function editar(id, texto, horario, data) {
         localStorage.setItem('notes', JSON.stringify(notas))
     })
 }
+function reciclarNota(id, elemento, text, color, horario, data) {
+    elemento.remove()
+    addNote(color, text,horario,data)
+    const notasExcluidasUpdate = getLocalStorageNotasExcluidas()
+        .filter((nota) => nota.id !== id);
+    localStorage.setItem('notasExcluidas', JSON.stringify(notasExcluidasUpdate))
 
+}
 function duplicar(texto, color, fixed) {
     const nota = {
         id: generateId(),
@@ -163,7 +205,7 @@ function duplicar(texto, color, fixed) {
     loadTarefas()
 }
 
-function removerNota(id, elemento) {
+function removerNota(id, elemento, text, color, horario, data) {
     const card = elemento.closest('div.card')
 
     card.remove()
@@ -171,14 +213,25 @@ function removerNota(id, elemento) {
     const notas = getLocalStorage()
     const arrayAtualizado = notas.filter((nota) => id !== nota.id)
     localStorage.setItem('notes', JSON.stringify(arrayAtualizado))
-
     loadTarefas()
+
+    const notaExcluida = {
+        id,
+        texto: text,
+        color,
+        horario,
+        data
+
+    }
+
+    saveLocalStrorageNotasExcluidas(notaExcluida)
+
 }
 function cleanNotes() {
     containerCards.replaceChildren([])
 }
 
-function fixeNota(id, elemento) {
+function fixeNota(id) {
 
     const notes = getLocalStorage()
     notes.map((note) => {
@@ -237,12 +290,46 @@ function pesquisar(texto) {
     if (texto !== '') {
         cleanNotes()
         notesPesquisados.forEach((note) => {
-            createNote(note.texto, note.fixed,note.cor, note.id, note.horario, note.data)
+            createNote(note.texto, note.fixed, note.cor, note.id, note.horario, note.data)
         })
     }
-    else{
+    else {
         loadTarefas()
     }
+}
+
+function downloadCSV() {
+    const notes = getLocalStorage()
+    const csv = [
+        ['texto da nota', 'fixada ?', 'horario', 'data', 'id'],
+        ...notes.map((note) => [note.texto, note.fixed, note.horario, note.data, note.id])
+    ].map((e) => e.join(','))
+        .join('\n');
+
+    const element = document.createElement('a');
+
+    element.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv)
+    console.log(encodeURI(csv))
+    element.target = '_blank';
+    element.download = 'notes.csv'
+    element.click()
+}
+
+function exibirNotasExcluidas() {
+    btnNotasExcluidas.classList.toggle('active')
+    if (btnNotasExcluidas.classList.contains('active')) {
+        cleanNotes()
+        const notasExcluidas = getLocalStorageNotasExcluidas()
+        notasExcluidas.forEach((nota) => {
+            createNote(nota.texto, nota.fixed, nota.color, nota.id, nota.horario, nota.data)
+        })
+
+    }
+    else {
+        loadTarefas()
+    }
+
+
 }
 
 //------------------------localhost--------------------
@@ -252,40 +339,34 @@ function getLocalStorage() {
 
     return ordernotes
 }
+
 function saveLocalStrorage(nota) {
     const notes = getLocalStorage();
     notes.push(nota)
     localStorage.setItem('notes', JSON.stringify(notes))
 }
-function downloadCSV(){
-    const notes = getLocalStorage()
-    const csv = [
-        ['texto da nota','fixada ?','horario','data','id'],
-        ...notes.map((note)=>[note.texto,note.fixed,note.horario,note.data,note.id])
-    ].map((e)=>e.join(','))
-    .join('\n');
 
-    const element = document.createElement('a');
+function getLocalStorageNotasExcluidas() {
+    const notesExcluidas = JSON.parse(localStorage.getItem('notesExcluidas')) || []
+    return notesExcluidas
+}
 
-    element.href = 'data:text/csv;charset=utf-8,'+encodeURI(csv)
-    console.log(encodeURI(csv))
-    element.target ='_blank';
-    element.download = 'notes.csv'
-    element.click()
-
+function saveLocalStrorageNotasExcluidas(notaExluida) {
+    const notesExcluidas = getLocalStorageNotasExcluidas()
+    notesExcluidas.push(notaExluida)
+    localStorage.setItem('notesExcluidas', JSON.stringify(notesExcluidas))
 }
 // Eventos ----------------------------------------
 
-
 btnCreate.addEventListener('click', () => {
     const texto = textAreaCreate.value
-
+    const color = colorRow;
     if (!texto || texto == '') {
         console.log('vazio') //fazer alerta visual, quando o texto for vazio
         return
     }
 
-    addNote(texto)
+    addNote(color, texto)
     textAreaCreate.value = ""
     textAreaCreate.focus()
 })
@@ -293,8 +374,13 @@ inputSearch.addEventListener('keyup', () => {
     const texto = inputSearch.value
     pesquisar(texto)
 })
-btnCSV.addEventListener('click',()=>{
+btnCSV.addEventListener('click', () => {
     downloadCSV()
+})
+btnNotasExcluidas.addEventListener('click', () => {
+
+    exibirNotasExcluidas()
+
 })
 // inicialização ---------------------------
 loadTarefas()
