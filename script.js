@@ -39,7 +39,7 @@ inputsRadios.forEach((btnRadio) => {
     })
 })
 
-function addNote(color, text, horario=generateHours(),fixed = false) {
+function addNote(color, text, horario=generateHours(),fixed = false, notaExcluida=false) {
     const nota = {
         id: generateId(),
         texto: text,
@@ -50,7 +50,12 @@ function addNote(color, text, horario=generateHours(),fixed = false) {
     }
 
     saveLocalStrorage(nota)
-    createNote(nota.texto, nota.fixed, nota.cor, nota.id, nota.horario, nota.data)
+
+        if(notaExcluida== false){
+      const card = createNote(nota.texto, nota.fixed, nota.cor, nota.id, nota.horario, nota.data)      
+      containerCards.appendChild(card)
+    }
+
 }
 
 
@@ -115,11 +120,12 @@ const createNote = (text, fixed, color, id, horario, data) => {
     }
 
     containerCardsEmpty.style.display = 'none'
-    containerCards.appendChild(card)
+    
+return card
 
 }
 
-function createNoteExluida(text, fixed, color, id, horario, data) {
+function createNoteExluida(text,color, id, horario, data) {
     const elementoStr = `<div class="card">
 <div class="time-user-day">
     <p id="hora">${horario}</p>
@@ -130,9 +136,8 @@ function createNoteExluida(text, fixed, color, id, horario, data) {
 <textarea name="note-card" id="" cols="30" rows="10">${text}</textarea>
 <div class="container-btns-card-main">
     <div class="btn-card recicle" >
-        <img src="pin.svg" alt="icone de pin">
+        <i class="fa-solid fa-recycle"></i>
     </div>
-
 </div>
 <div class="line-color"></div>
 </div>`
@@ -140,15 +145,12 @@ function createNoteExluida(text, fixed, color, id, horario, data) {
     const elementoHTML = parse.parseFromString(elementoStr, 'text/html')
     const card = elementoHTML.querySelector('.card')
     const lineColor = card.querySelector('.line-color')
-    const btnReciclar = card.querySelector('recicle')
+    const btnReciclar = card.querySelector('.recicle')
     lineColor.style.backgroundColor = color
+    
     btnReciclar.addEventListener('click', (e) => {
-        reciclarNota(id, e.target, text, color, horario, data)
+        reciclarNota(id, e.target, text, color, horario)
     })
-
-    if (fixed === true) {
-        card.classList.add('fixed')
-    }
 
 
     containerCards.appendChild(card)
@@ -165,7 +167,8 @@ function loadTarefas() {
     else {
         containerCardsEmpty.style.display = 'none'
         notes.forEach((nota) => {
-            createNote(nota.texto, nota.fixed, nota.cor, nota.id, nota.horario, nota.data)
+           const card = createNote(nota.texto, nota.fixed, nota.cor, nota.id, nota.horario, nota.data)
+           containerCards.appendChild(card)
         })
     }
 }
@@ -182,14 +185,17 @@ function editar(id, texto, horario, data) {
         localStorage.setItem('notes', JSON.stringify(notas))
     })
 }
+
 function reciclarNota(id, elemento, text, color, horario, data) {
-    elemento.remove()
-    addNote(color, text,horario,data)
-    const notasExcluidasUpdate = getLocalStorageNotasExcluidas()
+    elemento.closest('div.card').remove()
+
+    addNote(color, text,horario,false,true)
+    const notesExcluidasUpdate = getLocalStorageNotasExcluidas()
         .filter((nota) => nota.id !== id);
-    localStorage.setItem('notasExcluidas', JSON.stringify(notasExcluidasUpdate))
+    localStorage.setItem('notesExcluidas', JSON.stringify(notesExcluidasUpdate))
 
 }
+
 function duplicar(texto, color, fixed) {
     const nota = {
         id: generateId(),
@@ -321,7 +327,7 @@ function exibirNotasExcluidas() {
         cleanNotes()
         const notasExcluidas = getLocalStorageNotasExcluidas()
         notasExcluidas.forEach((nota) => {
-            createNote(nota.texto, nota.fixed, nota.color, nota.id, nota.horario, nota.data)
+            createNoteExluida(nota.texto, nota.color, nota.id, nota.horario, nota.data)
         })
 
     }

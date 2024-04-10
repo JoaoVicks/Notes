@@ -1,22 +1,37 @@
+
+/* Estilos gerais ---------------------------------*/
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
-
+button {
+    cursor: pointer;
+}
+textarea {
+    resize: none;
+}
+/* ------------------------------------------------ */
 body {
     background: #1B1B1B;
     display: flex;
     font-family: 'Poppins';
 }
 
-button {
-    cursor: pointer;
+#container-alerts{
+   position: fixed;
+   right: 0; 
+   margin-top: 1.3rem;
+   color: white;
+   max-width: 550px;
+   text-align: center;
+   background-color: #131212;
+   border-radius: 10px;
+   padding: 1rem;
 }
 
 aside {
     flex: 2 1 0;
-    
     position: fixed;
     color: #fdfdfd;
     background-color: #121212;
@@ -29,7 +44,7 @@ aside {
 
 /* Classe utilitária */
 .neuphorm {
-    border-radius: 20px;
+    border-radius: 10px;
     background: #3a3737;
     box-shadow: inset -49px 49px 65px #252323,
         inset 49px -49px 65px #4f4b4b,
@@ -39,11 +54,9 @@ aside {
 .hidden {
     display: none;
 }
+/* ------------------------------------------------------- */
 
 
-textarea {
-    resize: none;
-}
 
 ::-webkit-scrollbar {
     width: 8px;
@@ -213,7 +226,7 @@ header {
     background-color: #3A3737;
     padding: 1rem 1.7rem;
     width:10%;
-    border-radius: 20px;
+    
     display: flex;
     justify-content: center;
 
@@ -239,7 +252,7 @@ header {
     align-items: center;
     padding: 0.7rem 1.3rem;
     gap: 1rem;
-    border-radius: 20px;
+    
 }
 
 .container-input input {
@@ -278,7 +291,7 @@ main {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-radius: 20px;
+
     margin-left: 3rem;
 
 }
@@ -305,9 +318,8 @@ main {
 }
 
 #donwlad-csv {
-    margin-right: 5rem;
     width: 200px;
-    border-radius: 20px;
+    padding: 0.9rem 1rem ;
     background-color: #3A3737;
     outline: none;
     color: white;
@@ -408,6 +420,10 @@ main {
 
 .fixed {
     border: 3px solid #878787;
+}
+.recicle{
+    color: #878787;
+    font-size: 24px;
 }
 
 #container-cards-empty {
