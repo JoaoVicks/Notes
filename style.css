@@ -16,11 +16,12 @@ body {
     background: #1B1B1B;
     display: flex;
     font-family: 'Poppins';
+    overflow: hidden;
 }
 
 #container-alerts{
    position: fixed;
-   right: 0; 
+   right: -550px; 
    margin-top: 1.3rem;
    color: white;
    max-width: 550px;
@@ -28,6 +29,8 @@ body {
    background-color: #131212;
    border-radius: 10px;
    padding: 1rem;
+   transform-style: flat;
+   transition: all 1s                                                                             ;
 }
 
 aside {
@@ -336,6 +339,8 @@ main {
     gap: 2rem;
     margin-top: 2.2rem;
     margin-left: 3rem;
+    height: 80%;
+    overflow-y: hidden;
 
 }
 

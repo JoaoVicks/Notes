@@ -12,10 +12,17 @@ const HoraCardAside = document.querySelector('.hours')
 const dataCardAside = document.querySelector('.date')
 const btnCSV = document.querySelector('#donwlad-csv')
 const btnNotasExcluidas = document.querySelector('#notas-excluidas')
+const alerta = document.querySelector('#container-alerts')
 //-----------------variaveis Globais-----------------------
 let colorRow = '#5AE22A'
 //-------------------funções----------------------
-
+function animação (){
+    alerta.style.right = '50px'
+    setTimeout(() => {
+        alerta.style.right = '-550px'
+    }, '4000');
+}
+animação()
 
 inputsRadios.forEach((btnRadio) => {
     btnRadio.addEventListener('click', (e) => {
