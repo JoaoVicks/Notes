@@ -1,0 +1,57 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+button {
+    cursor: pointer;
+}
+
+textarea {
+    resize: none;
+}
+
+body {
+    background: #1B1B1B;
+    display: flex;
+    font-family: 'Poppins';
+    overflow: hidden;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+aside {
+    color: #fdfdfd;
+    background-color: #121212;
+    height: 100vh;
+    border-top-right-radius: 20px;
+    border-top-left-radius: 20px;
+    padding: 1.5rem;
+    width: 25vw;
+}
+
+main {
+    margin-top: 2rem;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    background-color: #3A3737;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #797979;
+    border-radius: 10px;
+}
+
+#container-principal {
+    padding-top: 1rem;
+    flex :2 1 0;
+}
+
