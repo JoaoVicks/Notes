@@ -1,0 +1,74 @@
+.container-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-top: 2.2rem;
+    margin-left: 3rem;
+    height: 70vh;
+    overflow-y: auto;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.card {
+    width: 20vw;
+    height: 40vh;
+    border-radius: 20px;
+    background-color: #0A0909;
+    box-shadow: 14px 14px 10px #121212;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    padding: 1.5vw 1vh;
+}
+
+.card textarea {
+    background-color: #0A0909;
+    color: #ffff;
+    border: none;
+    height: 50%;
+    outline: none;
+    width: 100%;
+    margin: 1.5rem auto 0rem;
+    font-family: 'Poppins';
+    font-size: 1.1rem;
+    font-weight: 200;
+}
+
+.container-btns-card-main {
+    display: flex;
+    gap: 0.6rem;
+    margin-top: 0.5rem;
+}
+
+.btn-card {
+    border: 3px solid #3A3737;
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.5s;
+}
+
+.btn-card:hover {
+    cursor: pointer;
+    border: 3px solid #fff;
+}
+
+#container-cards-empty {
+    background-color: #0A0909;
+    border: 2px dashed #4f4b4b;
+    border-radius: 20px;
+    width: 95%;
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-card img {
+    pointer-events: none;
+}
